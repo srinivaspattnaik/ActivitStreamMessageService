@@ -16,9 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
 
+
+//Need to use websocket for sending and receiving messages.
+//At present it is request-response paradigm
 @RestController
 public class MessageController 
 {
+	//Whye not private?
 	@Autowired
 	MessageDAO messageDAO;
 	
@@ -28,6 +32,7 @@ public class MessageController
 		message.setMessageID((int)(Math.random()*10000));
 		message.setMessageTime(new Date());
 		
+		//Remove all SOPs
 		System.out.println("Message :"+message.getMessageContent());
 		System.out.println("Circle Id:"+message.getReceiverCircleID());
 		System.out.println("Message:"+message.getReceiverID());
@@ -51,6 +56,7 @@ public class MessageController
 		
 		for(Message message:listMessages)
 		{
+			//whey link1??  Why not declare one instance of Link before for loop
 			Link link1=linkTo(MessageController.class).slash(message.getSenderID()).withSelfRel();
 			message.add(link1);
 		}
@@ -60,6 +66,7 @@ public class MessageController
 	@GetMapping("/getMessagesByReceiverId/{receiverid}")
 	public ResponseEntity<List<Message>> getMessageByReceiverId(@PathVariable("receiverid") String receiverid)
 	{
+		//What if the mail id .co.in??
 		receiverid=receiverid+".com";
 		
 		List<Message> listMessages=messageDAO.getMessageByUser(receiverid);
